@@ -1,5 +1,6 @@
 const { faker, th } = require('@faker-js/faker')
 const {v4: uuid} = require('uuid')
+const CustomError = require('../../CustomError')
 
 class SongController {
     constructor() {
@@ -21,7 +22,13 @@ class SongController {
     }
 
     findIndex(id) {
-        return this.songs.findIndex(song => song.id === id)
+        const index = this.songs.findIndex(song => song.id === id)
+
+        if(index === -1) {
+            throw new CustomError("Canción no encontrada", 404)
+        }
+
+        return index
     }
 
     findOne(id) {
@@ -55,6 +62,7 @@ class SongController {
     }
 
     delete(id) {
+        this.findOne(id)
         this.songs = this.songs.filter(song => song.id !== id)
     }
 }
