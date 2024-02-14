@@ -3,11 +3,10 @@ const {v4: uuid} = require('uuid')
 const CustomError = require('../../CustomError')
 
 class SongController {
-    constructor() {
-        this.songs = []
-    }
 
-    seeds() {
+    static songs = []
+    
+    static seeds() {
         for (let i = 0; i < 100; i++) {
             this.songs.push({
                 id: faker.string.uuid(),
@@ -17,11 +16,11 @@ class SongController {
         }
     }
 
-    find() {
+    static find() {
         return this.songs
     }
 
-    findIndex(id) {
+    static findIndex(id) {
         const index = this.songs.findIndex(song => song.id === id)
 
         if(index === -1) {
@@ -31,11 +30,11 @@ class SongController {
         return index
     }
 
-    findOne(id) {
+    static findOne(id) {
         return this.songs[this.findIndex(id)]
     }
 
-    create(data) {
+    static create(data) {
         const newSong = {
             ...data,
             id: uuid()
@@ -46,7 +45,7 @@ class SongController {
         return newSong
     }
 
-    update(id, data) {
+    static update(id, data) {
         const foundSong = this.findOne(id)
 
         const songUpdated = {
@@ -61,7 +60,7 @@ class SongController {
         return songUpdated
     }
 
-    delete(id) {
+    static delete(id) {
         this.findOne(id)
         this.songs = this.songs.filter(song => song.id !== id)
     }
