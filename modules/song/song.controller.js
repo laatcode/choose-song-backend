@@ -8,11 +8,19 @@ class SongController {
     static songs = []
     
     static seeds() {
+
+        if(!ArtistiController.find().length) {
+            ArtistiController.seeds()
+        }
+
         for (let i = 0; i < 100; i++) {
+            const artist = ArtistiController.artists[Math.ceil(Math.random() * ArtistiController.find().length)]
+            const artistId = artist.id
+            
             this.songs.push({
                 id: faker.string.uuid(),
                 name: faker.music.songName(),
-                artist: faker.person.fullName()
+                artistId
             })
         }
     }
