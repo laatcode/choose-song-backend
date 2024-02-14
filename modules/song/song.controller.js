@@ -1,6 +1,7 @@
 const { faker, th } = require('@faker-js/faker')
 const {v4: uuid} = require('uuid')
 const CustomError = require('../../CustomError')
+const ArtistiController = require('../artist/artist.controller')
 
 class SongController {
 
@@ -17,7 +18,12 @@ class SongController {
     }
 
     static find() {
-        return this.songs
+        const songs = this.songs.map(song => ({
+            ...song,
+            artist: ArtistiController.findOne(song.artistId).name
+        }))
+
+        return songs
     }
 
     static findIndex(id) {
@@ -31,10 +37,18 @@ class SongController {
     }
 
     static findOne(id) {
-        return this.songs[this.findIndex(id)]
+        const foundSong = this.songs[this.findIndex(id)]
+
+        return {
+            ...foundSong,
+            artist: ArtistiController.findOne(foundSong.artistId).name
+        }
     }
 
     static create(data) {
+
+        ArtistiController.findOne(data.artistId)
+
         const newSong = {
             ...data,
             id: uuid()
@@ -42,10 +56,15 @@ class SongController {
 
         this.songs.push(newSong)
 
-        return newSong
+        return this.findOne(newSong.id)
     }
 
     static update(id, data) {
+        
+        if(data.artistId) {
+            ArtistiController.findOne(data.artistId)
+        }
+
         const foundSong = this.findOne(id)
 
         const songUpdated = {
@@ -57,7 +76,7 @@ class SongController {
         this.songs = this.songs.filter(song => song.id !== id)
         this.songs.push(songUpdated)
 
-        return songUpdated
+        return this.findOne(id)
     }
 
     static delete(id) {

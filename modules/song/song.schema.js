@@ -2,7 +2,7 @@ const Joi = require('joi')
 
 const id = Joi.string().uuid()
 const name = Joi.string().min(2).max(60)
-const artist = Joi.string().min(2).max(60)
+const artistId = Joi.string().uuid()
 
 const getSongschema = Joi.object({
     id: id.required()
@@ -10,12 +10,12 @@ const getSongschema = Joi.object({
 
 const createSongSchema = Joi.object({
     name: name.required(),
-    artist: artist.required()
+    artistId: artistId.required()
 })
 
 const updateSongSchema = Joi.object({
     name: name,
-    artist: artist
+    artistId: artistId
 })
 
 module.exports = {
