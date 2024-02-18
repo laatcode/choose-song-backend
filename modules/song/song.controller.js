@@ -14,7 +14,7 @@ class SongController {
         }
 
         for (let i = 0; i < 100; i++) {
-            const artist = ArtistiController.artists[Math.ceil(Math.random() * ArtistiController.find().length)]
+            const artist = ArtistiController.artists[Math.floor(Math.random() * ArtistiController.find().length)]
             const artistId = artist.id
             
             this.songs.push({
